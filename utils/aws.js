@@ -204,7 +204,7 @@ const s3UploadBlobUsingMultipart = async ({
     FailedUploads = Parts.filter((f) => f.status == "rejected");
 
     try {
-      if (!FailedUploads.length) {
+      if (FailedUploads.length) {
         for (let i = 0; i < FailedUploads.length; i++) {
           let [data] = slicedData.filter(
             (f) => f.PartNumber == FailedUploads[i].value.PartNumber
@@ -241,7 +241,7 @@ const s3UploadBlobUsingMultipart = async ({
         Bucket: S3_BUCKET_PRIVATE,
         UploadId: MP_UPLOAD_ID,
       };
-      await AbortMultipartUploadCommand(initParams);
+      await new AbortMultipartUploadCommand(initParams);
     }
     return { uploadURL, finalURL };
   } catch (error) {
@@ -251,7 +251,7 @@ const s3UploadBlobUsingMultipart = async ({
       Bucket: S3_BUCKET_PRIVATE,
       UploadId: MP_UPLOAD_ID,
     };
-    await AbortMultipartUploadCommand(initParams);
+    await new AbortMultipartUploadCommand(initParams);
   }
   // });
 };
